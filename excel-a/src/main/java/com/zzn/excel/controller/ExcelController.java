@@ -1,17 +1,15 @@
 package com.zzn.excel.controller;
 
 import com.zzn.excel.domain.User;
+import com.zzn.excel.util.ExportExcelUtil;
 import com.zzn.excel.util.ExportExcelWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.zzn.excel.util.ExportExcelUtil;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

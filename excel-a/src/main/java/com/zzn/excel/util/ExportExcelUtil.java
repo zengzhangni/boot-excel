@@ -25,10 +25,15 @@ import java.util.regex.Pattern;
  */
 public class ExportExcelUtil<T> {
 
-    // 2007 版本以上 最大支持1048576行
-    public  final static String  EXCEl_FILE_2007 = "2007";
-    // 2003 版本 最大支持65536 行
-    public  final static String  EXCEL_FILE_2003 = "2003";
+    /**
+     * 2007 版本以上 最大支持1048576行
+     */
+    public final static String EXCEl_FILE_2007 = "2007";
+
+    /**
+     * 2003 版本 最大支持65536 行
+     */
+    public final static String EXCEL_FILE_2003 = "2003";
 
 
     /**
@@ -37,15 +42,15 @@ public class ExportExcelUtil<T> {
      * 时间格式默认：yyyy-MM-dd hh:mm:ss <br>
      * </p>
      *
-     * @param title 表格标题
+     * @param title   表格标题
      * @param dataset 数据集合
-     * @param out 输出流
+     * @param out     输出流
      * @param version 2003 或者 2007，不传时默认生成2003版本
      */
     public void exportExcel(String title, Collection<T> dataset, OutputStream out, String version) {
-        if(StringUtils.isEmpty(version) || EXCEL_FILE_2003.equals(version.trim())){
+        if (StringUtils.isEmpty(version) || EXCEL_FILE_2003.equals(version.trim())) {
             exportExcel2003(title, null, dataset, out, "yyyy-MM-dd HH:mm:ss");
-        }else{
+        } else {
             exportExcel2007(title, null, dataset, out, "yyyy-MM-dd HH:mm:ss");
         }
     }
@@ -56,38 +61,34 @@ public class ExportExcelUtil<T> {
      * 时间格式默认：yyyy-MM-dd hh:mm:ss <br>
      * </p>
      *
-     * @param title 表格标题
+     * @param title   表格标题
      * @param headers 头部标题集合
      * @param dataset 数据集合
-     * @param out 输出流
+     * @param out     输出流
      * @param version 2003 或者 2007，不传时默认生成2003版本
      */
-    public void exportExcel(String title,List<String> headers, Collection<T> dataset, OutputStream out,String version) {
-        if(StringUtils.isBlank(version) || EXCEL_FILE_2003.equals(version.trim())){
+    public void exportExcel(String title, List<String> headers, Collection<T> dataset, OutputStream out, String version) {
+        if (StringUtils.isBlank(version) || EXCEL_FILE_2003.equals(version.trim())) {
             exportExcel2003(title, headers, dataset, out, "yyyy-MM-dd HH:mm:ss");
-        }else{
+        } else {
             exportExcel2007(title, headers, dataset, out, "yyyy-MM-dd HH:mm:ss");
         }
     }
+
     /**
      * <p>
      * 通用Excel导出方法,利用反射机制遍历对象的所有字段，将数据写入Excel文件中 <br>
      * 此版本生成2007以上版本的文件 (文件后缀：xlsx)
      * </p>
      *
-     * @param title
-     *            表格标题名
-     * @param headers
-     *            表格头部标题集合
-     * @param dataset
-     *            需要显示的数据集合,集合中一定要放置符合JavaBean风格的类的对象。此方法支持的
-     *            JavaBean属性的数据类型有基本数据类型及String,Date
-     * @param out
-     *            与输出设备关联的流对象，可以将EXCEL文档导出到本地文件或者网络中
-     * @param pattern
-     *            如果有时间数据，设定输出格式。默认为"yyyy-MM-dd hh:mm:ss"
+     * @param title   表格标题名
+     * @param headers 表格头部标题集合
+     * @param dataset 需要显示的数据集合,集合中一定要放置符合JavaBean风格的类的对象。此方法支持的
+     *                JavaBean属性的数据类型有基本数据类型及String,Date
+     * @param out     与输出设备关联的流对象，可以将EXCEL文档导出到本地文件或者网络中
+     * @param pattern 如果有时间数据，设定输出格式。默认为"yyyy-MM-dd hh:mm:ss"
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void exportExcel2007(String title, List<String> headers, Collection<T> dataset, OutputStream out, String pattern) {
         // 声明一个工作薄
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -170,8 +171,8 @@ public class ExportExcelUtil<T> {
                         + fieldName.substring(1);
                 try {
                     tCls = t.getClass();
-                    getMethod = tCls.getMethod(getMethodName, new Class[] {});
-                    value = getMethod.invoke(t, new Object[] {});
+                    getMethod = tCls.getMethod(getMethodName, new Class[]{});
+                    value = getMethod.invoke(t, new Object[]{});
                     // 判断值的类型后进行强制类型转换
                     textValue = null;
                     if (value instanceof Integer) {
@@ -229,26 +230,20 @@ public class ExportExcelUtil<T> {
     }
 
 
-
     /**
      * <p>
      * 通用Excel导出方法,利用反射机制遍历对象的所有字段，将数据写入Excel文件中 <br>
      * 此方法生成2003版本的excel,文件名后缀：xls <br>
      * </p>
      *
-     * @param title
-     *            表格标题名
-     * @param headers
-     *            表格头部标题集合
-     * @param dataset
-     *            需要显示的数据集合,集合中一定要放置符合JavaBean风格的类的对象。此方法支持的
-     *            JavaBean属性的数据类型有基本数据类型及String,Date
-     * @param out
-     *            与输出设备关联的流对象，可以将EXCEL文档导出到本地文件或者网络中
-     * @param pattern
-     *            如果有时间数据，设定输出格式。默认为"yyyy-MM-dd hh:mm:ss"
+     * @param title   表格标题名
+     * @param headers 表格头部标题集合
+     * @param dataset 需要显示的数据集合,集合中一定要放置符合JavaBean风格的类的对象。此方法支持的
+     *                JavaBean属性的数据类型有基本数据类型及String,Date
+     * @param out     与输出设备关联的流对象，可以将EXCEL文档导出到本地文件或者网络中
+     * @param pattern 如果有时间数据，设定输出格式。默认为"yyyy-MM-dd hh:mm:ss"
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void exportExcel2003(String title, List<String> headers, Collection<T> dataset, OutputStream out, String pattern) {
         // 声明一个工作薄
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -331,8 +326,8 @@ public class ExportExcelUtil<T> {
                         + fieldName.substring(1);
                 try {
                     tCls = t.getClass();
-                    getMethod = tCls.getMethod(getMethodName, new Class[] {});
-                    value = getMethod.invoke(t, new Object[] {});
+                    getMethod = tCls.getMethod(getMethodName, new Class[]{});
+                    value = getMethod.invoke(t, new Object[]{});
                     // 判断值的类型后进行强制类型转换
                     textValue = null;
                     if (value instanceof Integer) {
