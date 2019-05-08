@@ -1,20 +1,21 @@
-package org.zzn.excel.controller;
+package com.zzn.excel.controller;
 
+import com.zzn.excel.domain.User;
+import com.zzn.excel.util.ExportExcelWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.zzn.excel.domain.User;
-import org.zzn.excel.util.ExportExcelUtil;
-import org.zzn.excel.util.ExportExcelWrapper;
+import com.zzn.excel.util.ExportExcelUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,11 +27,12 @@ import java.util.List;
 @RestController
 public class ExcelController {
 
+
     @ApiOperation(value = "获取表格")
     @GetMapping("/get/excel")
-    public void getExcel(HttpServletRequest request, HttpServletResponse response) {
+    public void getExcel(HttpServletResponse response) {
         List<User> list = getData();
-        String[] columnNames = {"ID", "姓名", "密码", "性别", "年龄", "金额", "是否拥有", "生日"};
+        List<String> columnNames = Arrays.asList("ID", "姓名", "密码", "性别", "年龄", "金额", "是否拥有", "生日");
         String fileName = "用户";
         ExportExcelWrapper<User> util = new ExportExcelWrapper<>();
         util.exportExcel(fileName, fileName, columnNames, list, response, ExportExcelUtil.EXCEL_FILE_2003);
@@ -41,20 +43,17 @@ public class ExcelController {
     @GetMapping("/getExcel")
     public void getExcel2(HttpServletResponse response) {
         List<User> list = getData();
-        List<String> list1 = new ArrayList<>();
-        Field[] fields = User.class.getClass().getFields();
+        List<String> columnNames = new ArrayList<>();
+        Field[] fields = list.get(0).getClass().getDeclaredFields();
         for (Field field : fields) {
-            ApiOperation annotation = field.getAnnotation(ApiOperation.class);
-            list1.add(annotation.value());
+            ApiModelProperty annotation = field.getAnnotation(ApiModelProperty.class);
+            columnNames.add(annotation.value());
         }
-        ApiModel apiModel = User.class.getClass().getAnnotation(ApiModel.class);
+        ApiModel apiModel = list.get(0).getClass().getAnnotation(ApiModel.class);
         String fileName = apiModel.value();
-
-        String[] columnNames = list1.toArray(new String[list1.size()]);
         ExportExcelWrapper<User> util = new ExportExcelWrapper<>();
         util.exportExcel(fileName, fileName, columnNames, list, response, ExportExcelUtil.EXCEL_FILE_2003);
     }
-
 
     private List<User> getData() {
         // 准备数据

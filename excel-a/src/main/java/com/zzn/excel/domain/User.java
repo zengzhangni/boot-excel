@@ -1,4 +1,4 @@
-package org.zzn.excel.domain;
+package com.zzn.excel.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;

@@ -1,10 +1,10 @@
-package org.zzn.excel.util;
+package com.zzn.excel.util;
 
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author zengzhangni
@@ -24,7 +24,7 @@ public class ExportExcelWrapper<T> extends ExportExcelUtil<T> {
      * @param response 请求
      * @param version 2003 或者 2007，不传时默认生成2003版本
      */
-    public void exportExcel(String fileName, String title, String[] headers, Collection<T> dataset, HttpServletResponse response, String version) {
+    public void exportExcel(String fileName, String title, List<String> headers, Collection<T> dataset, HttpServletResponse response, String version) {
         try {
             response.setContentType("application/vnd.ms-excel");
             response.addHeader("Content-Disposition", "attachment;filename="+ new String(fileName.getBytes(), "ISO8859-1") + ".xls");
